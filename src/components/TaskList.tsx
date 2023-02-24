@@ -1,58 +1,56 @@
 import { ReactElement, useState } from "react";
+import { ListFrame } from "../styles/TaskList";
 import { TaskInterface, Task } from "./Task";
 
 export function TaskList(): ReactElement {
-  const tasksList: TaskInterface[] = [
-    {
-      id: 0,
-      name: "Duffy",
-      category: "Chelsea",
-      status: false,
-      deleteTask: handleDeleteTask,
-    },
-    {
-      id: 1,
-      name: "Butch",
-      category: "Myranda",
-      status: true,
-      deleteTask: handleDeleteTask,
-    },
-  ];
+  const [taskList, setTaskList] = useState(loadTaskList());
 
-  const [taskList, setTaskList] = useState(tasksList);
+  function loadTaskList(): TaskInterface[] {
+    const storedTaskList = localStorage.getItem("taskList");
+
+    if (storedTaskList) {
+      return JSON.parse(storedTaskList);
+    } else {
+      localStorage.setItem("taskList", JSON.stringify([]));
+      return [];
+    }
+  }
 
   function handleDeleteTask(taskId: number): void {
     const updatedTaskList = taskList.filter((task) => task.id !== taskId);
+    localStorage.setItem("taskList", JSON.stringify(updatedTaskList));
     setTaskList(updatedTaskList);
   }
 
   function handleAddTask(): void {
     const newTask = {
-      id: taskList[taskList.length - 1].id + 1,
+      id: taskList[taskList.length - 1]?.id + 1 || 1,
       name: "",
-      category: "",
       status: false,
-      deleteTask: handleDeleteTask
-    }
-    const newList = [...taskList, newTask]
+      deleteTask: handleDeleteTask,
+    };
+    const newList = [...taskList, newTask];
     setTaskList(newList);
   }
 
   return (
-    <div>
-      <ul>
-        {taskList.map((task) => (
-          <Task
-            key={task.id}
-            id={task.id}
-            name={task.name}
-            status={task.status}
-            category={task.category}
-            deleteTask={handleDeleteTask}
-          />
-        ))}
-      </ul>
+    <>
+      {taskList.length > 0 && (
+        <ListFrame>
+          <ul>
+            {taskList.map((task) => (
+              <Task
+                key={task.id}
+                id={task.id}
+                name={task.name}
+                status={task.status}
+                deleteTask={handleDeleteTask}
+              />
+            ))}
+          </ul>
+        </ListFrame>
+      )}
       <button onClick={() => handleAddTask()}>New Task</button>
-    </div>
+    </>
   );
 }

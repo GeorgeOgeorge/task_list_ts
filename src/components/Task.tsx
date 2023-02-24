@@ -1,22 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { TaskFrame } from "../styles/Task";
 
 export interface TaskInterface {
   id: number;
   name: string;
-  category: string;
   status: boolean;
   deleteTask: (id: number) => void;
 }
 
-export function Task({
-  id,
-  name,
-  category,
-  status,
-  deleteTask,
-}: TaskInterface) {
+export function Task({ id, name, status, deleteTask }: TaskInterface) {
   const [taskName, SetTaskName] = useState(name);
   const [taskStatus, SetTaskStatus] = useState(status);
+
+  useEffect(() => {
+    const storedTaskList = JSON.parse(localStorage.getItem("taskList") || "[]");
+
+    if (storedTaskList.length > 0) {
+      const savedTasks = storedTaskList.filter((task: TaskInterface) => task.id !== id);
+
+      const newStoredTaskList = [...savedTasks, { id, name: taskName, status: taskStatus },];
+
+      localStorage.setItem("taskList", JSON.stringify(newStoredTaskList));
+    }
+  }, [taskName, taskStatus]);
 
   function handleCheck(): void {
     SetTaskStatus(!taskStatus);
@@ -27,7 +33,7 @@ export function Task({
   }
 
   return (
-    <li key={id} className="task" style={{ listStyle: "none" }}>
+    <TaskFrame key={id} className="task" style={{ listStyle: "none" }}>
       <input type="checkbox" checked={taskStatus} onChange={handleCheck} />
       <input
         type="text"
@@ -36,6 +42,6 @@ export function Task({
         disabled={taskStatus}
       />
       <button onClick={() => deleteTask(id)}>Trash</button>
-    </li>
+    </TaskFrame>
   );
 }
