@@ -1,6 +1,7 @@
 import { ReactElement, useState } from "react";
+import { TaskInterface } from "../interfaces/task_interface";
 import { ListFrame, TaskListButton } from "../styles/TaskList";
-import { TaskInterface, Task } from "./Task";
+import { Task } from "./Task";
 
 export function TaskList(): ReactElement {
   const [taskList, setTaskList] = useState(loadTaskList());

@@ -2,13 +2,7 @@ import { useEffect, useState } from "react";
 import { TaskFrame, TaskTextInput } from "../styles/Task";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-
-export interface TaskInterface {
-  id: number;
-  name: string;
-  status: boolean;
-  deleteTask: (id: number) => void;
-}
+import { TaskInterface } from "../interfaces/task_interface";
 
 export function Task({ id, name, status, deleteTask }: TaskInterface) {
   const [taskName, SetTaskName] = useState(name);
