@@ -6,7 +6,7 @@ function App(): ReactElement {
   return (
     <AppFrame>
       <AppHeader>
-        <h2>Website todo</h2>
+        <p>Website todo</p>
       </AppHeader>
       <TaskList/>
     </AppFrame>

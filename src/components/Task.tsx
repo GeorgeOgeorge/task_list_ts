@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { TaskFrame } from "../styles/Task";
+import { TaskFrame, TaskTextInput } from "../styles/Task";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 export interface TaskInterface {
   id: number;
@@ -17,7 +19,6 @@ export function Task({ id, name, status, deleteTask }: TaskInterface) {
 
     if (storedTaskList.length > 0) {
       const savedTasks = storedTaskList.filter((task: TaskInterface) => task.id !== id);
-
       const newStoredTaskList = [...savedTasks, { id, name: taskName, status: taskStatus },];
 
       localStorage.setItem("taskList", JSON.stringify(newStoredTaskList));
@@ -33,15 +34,17 @@ export function Task({ id, name, status, deleteTask }: TaskInterface) {
   }
 
   return (
-    <TaskFrame key={id} className="task" style={{ listStyle: "none" }}>
+    <TaskFrame key={id}>
       <input type="checkbox" checked={taskStatus} onChange={handleCheck} />
-      <input
+      <TaskTextInput
         type="text"
         value={taskName}
         onChange={(event) => handleChangeName(event.target.value)}
         disabled={taskStatus}
       />
-      <button onClick={() => deleteTask(id)}>Trash</button>
+      <button onClick={() => deleteTask(id)}>
+        <FontAwesomeIcon icon={faTrashAlt} />
+      </button>
     </TaskFrame>
   );
 }

@@ -1,5 +1,5 @@
 import { ReactElement, useState } from "react";
-import { ListFrame } from "../styles/TaskList";
+import { ListFrame, TaskListButton } from "../styles/TaskList";
 import { TaskInterface, Task } from "./Task";
 
 export function TaskList(): ReactElement {
@@ -50,7 +50,7 @@ export function TaskList(): ReactElement {
           </ul>
         </ListFrame>
       )}
-      <button onClick={() => handleAddTask()}>New Task</button>
+      <TaskListButton onClick={() => handleAddTask()}> + New Task</TaskListButton>
     </>
   );
 }
